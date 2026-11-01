@@ -311,16 +311,9 @@ class TestPostprocessGeneratedText:
         # lm-evaluation-harness#4458: the trailing lstrip ran on every
         # generation, stripping the indentation a code-continuation task
         # needs (HumanEval gen_prefix ends at the docstring).
-        generation = "
-
-    return max(l)"
-        assert (
-            postprocess_generated_text(generation, None, "</think>")
-            == generation
-        )
+        generation = "\n\n    return max(l)"
+        assert postprocess_generated_text(generation, None, "</think>") == generation
 
     def test_strips_reasoning_when_think_end_token_present(self):
-        generation = "<think>reasoning</think>
-
-answer"
+        generation = "<think>reasoning</think>\n\nanswer"
         assert postprocess_generated_text(generation, None, "</think>") == "answer"
